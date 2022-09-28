@@ -28,10 +28,10 @@ app.listen(PORT, () => console.log(`listening on Port ${PORT}`));
 
 app.get('/weather', (req, res) => {
     console.log(req.query);
-    let place =data.find( data => data.city_name.toLowerCase() === req.query.searchQuery.toLowerCase());
+    let place = data.find( data => data.city_name === req.query.searchQuery);
     try { 
         res.send(weatherData(place.data));
-    } catch {
+    } catch (error) {
         place = 'Error, we don\'t have data for that location';
     }
 });
