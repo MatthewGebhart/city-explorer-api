@@ -38,7 +38,7 @@ app.get('/weather', (req, res) => {
 
 
 function weatherData(arr) {
-    return arr.map(data) => {
+    return arr.map(data => {
         return new Forecast(data.datetime, data.weather.description)
     });
 };
