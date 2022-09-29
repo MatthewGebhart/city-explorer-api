@@ -28,13 +28,27 @@ app.listen(PORT, () => console.log(`listening on Port ${PORT}`));
 // Endpoints:
 // ------------------
 
+app.get('/', (req, res) => {
+    res.send('Hello from the home route!');
+});
+
 
 app.get('/weather', (req, res) => {
-    console.log(`this is req.query ${req.query}`);
+    console.log(`this is req ${req.query}`);
+    let { lat, lon, } = req.query;
+    console.log(lat);
     let searchQuery = req.query.searchQuery;
-    let place = data.find( item => item.city_name.toLowerCase() === searchQuery.toLowerCase());
-    try { 
+    let URL = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&days=3&units=I&key=${process.env.WEATHER_API_KEY}`;
+    console.log(`this is URL ${URL}`);
+    try {
+        let weatherFetched = await axios.get(URL);
+        let weatherFetchedArray = 
+        // TODO work check this data (replace?)
         res.send(weatherData(place.data));
+    
+    // let place = data.find( item => item.city_name.toLowerCase() === searchQuery.toLowerCase());
+    // try { 
+    //     res.send(weatherData(place.data));
     } catch (error) {
         place = 'Error, we don\'t have data for that location';
     }
