@@ -11,6 +11,8 @@ const express = require('express');
 const cors = require('cors');
 // load data
 const data = require('./data/weather.json');
+// const axios = require('axios');
+const { response } = require('express');
 //start our server
 const app = express();
 
@@ -26,9 +28,11 @@ app.listen(PORT, () => console.log(`listening on Port ${PORT}`));
 // Endpoints:
 // ------------------
 
+
 app.get('/weather', (req, res) => {
-    console.log(req.query);
-    let place = data.find( data => data.city_name === req.query.searchQuery);
+    console.log(`this is req.query ${req.query}`);
+    let searchQuery = req.query.searchQuery;
+    let place = data.find( item => item.city_name.toLowerCase() === searchQuery.toLowerCase());
     try { 
         res.send(weatherData(place.data));
     } catch (error) {
@@ -36,12 +40,18 @@ app.get('/weather', (req, res) => {
     }
 });
 
-
-function weatherData(arr) {
-    return arr.map(data => {
-        return new Forecast(data.datetime, data.weather.description)
+let weatherData = data => {
+    let weatherOfCity = [];
+    data.forEach(item => {
+        weatherOfCity.push(
+            new Forecast(
+                item.valid_date,
+                `High of ${item.high_temp}, Low of ${item.low_temp} with ${item.weather.description}`
+            )
+        );
     });
-};
+    return weatherOfCity;
+}
 
 class Forecast {
     constructor(date, description){
@@ -49,7 +59,37 @@ class Forecast {
         this.description = description;
     }
 };
+// in-class Example for lab 08
 
+// app.get('/photos', getPhotos);
+
+// troubleshooting
+// 1. check server is running
+// 2. in frontend, check the network tab
+// 3. in the backend visit the url || thunderclient GET request
+// = should see json data from the API
+
+
+// async function getPhotos(req, res) {
+//     const searchQuery = req.query.searchQuery;
+//     const url = `https://api.unsplash.com/search/photos/?client_id=${process.env.UNSPLASH_ACCESS_KEY}&query=${searchQuery}`;
+//     try {
+//         const photoResponse = await axios.get(url);
+//         const photoArray = photoResponse.data.results.map(photo => new Photo(photo));
+//         res.status(200).send(photoArray);
+//     } catch (error) {
+//         console.log('error messages error with get photos');
+//         response.status(500).send(`server error ${error}`);
+//     }
+
+// class Photo {
+//     constructor(obj) {
+//         this.img_url = obj.urls.regular;
+//         this.photographer = obj.user.name;
+//     }
+// }
+
+// }
 // Catch all endpoint:
 
 app.get('*', (req, res) => {
