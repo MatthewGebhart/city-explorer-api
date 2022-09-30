@@ -4,17 +4,21 @@
 //Set Up:
 // ----------
 
+
 require('dotenv').config();
 //express server
 const express = require('express');
 // allows for Cross Origin Resource Sharing
 const cors = require('cors');
 // load data
-const data = require('./data/weather.json');
-// const axios = require('axios');
+const axios = require('axios');
+// const data = require('./data/weather.json');
 const { response } = require('express');
 //start our server
 const app = express();
+const getWeather = require('./modules/getWeather.js');
+const getMovies = require('./modules/getMovies.js');
+
 
 //Middleware
 app.use(cors());
@@ -32,50 +36,12 @@ app.get('/', (req, res) => {
     res.send('Hello from the home route!');
 });
 
+app.get('/weather', getWeather);
+app.get('/movies', getMovies);
 
-app.get('/weather', (req, res) => {
-    console.log(`this is req ${req.query}`);
-    let { lat, lon, } = req.query;
-    console.log(lat);
-    let searchQuery = req.query.searchQuery;
-    let URL = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&days=3&units=I&key=${process.env.WEATHER_API_KEY}`;
-    console.log(`this is URL ${URL}`);
-    try {
-        let weatherFetched = await axios.get(URL);
-        let weatherFetchedArray = 
-        // TODO work check this data (replace?)
-        res.send(weatherData(place.data));
-    
-    // let place = data.find( item => item.city_name.toLowerCase() === searchQuery.toLowerCase());
-    // try { 
-    //     res.send(weatherData(place.data));
-    } catch (error) {
-        place = 'Error, we don\'t have data for that location';
-    }
-});
 
-let weatherData = data => {
-    let weatherOfCity = [];
-    data.forEach(item => {
-        weatherOfCity.push(
-            new Forecast(
-                item.valid_date,
-                `High of ${item.high_temp}, Low of ${item.low_temp} with ${item.weather.description}`
-            )
-        );
-    });
-    return weatherOfCity;
-}
 
-class Forecast {
-    constructor(date, description){
-        this.date = date,
-        this.description = description;
-    }
-};
-// in-class Example for lab 08
 
-// app.get('/photos', getPhotos);
 
 // troubleshooting
 // 1. check server is running
@@ -84,26 +50,7 @@ class Forecast {
 // = should see json data from the API
 
 
-// async function getPhotos(req, res) {
-//     const searchQuery = req.query.searchQuery;
-//     const url = `https://api.unsplash.com/search/photos/?client_id=${process.env.UNSPLASH_ACCESS_KEY}&query=${searchQuery}`;
-//     try {
-//         const photoResponse = await axios.get(url);
-//         const photoArray = photoResponse.data.results.map(photo => new Photo(photo));
-//         res.status(200).send(photoArray);
-//     } catch (error) {
-//         console.log('error messages error with get photos');
-//         response.status(500).send(`server error ${error}`);
-//     }
 
-// class Photo {
-//     constructor(obj) {
-//         this.img_url = obj.urls.regular;
-//         this.photographer = obj.user.name;
-//     }
-// }
-
-// }
 // Catch all endpoint:
 
 app.get('*', (req, res) => {
