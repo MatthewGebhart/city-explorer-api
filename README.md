@@ -17,7 +17,8 @@ using the Location IQ Geocoding API and Axios to perform search queries.
 - 9-27-2022 implemented server and proof of life
 - 9-28-2022 got express server working and submitting weather.json data back to client
 - 9-29-2022 Added modules/components, having trouble with query requests for Movie DB
-- 9-30-2022 Resolved Query issues, everything talking and working. Some styling for movie cards, componentized and modularized(?) more things. 
+- 9-30-2022 Resolved Query issues, everything talking and working. Some styling for movie cards, componentized and modularized(?) more things.
+- 10-1-2022 debugged and implemented global cache  
 
 ## Credit and Collaborations
 - credit to Sage Jankowski for some ideation and paired programming on Lab 6
@@ -93,13 +94,13 @@ Actual time needed to complete: __3___
 
 **Name of feature:** Lab 10 - adding Cashe to improve performance
 
-Estimate of time needed to complete: __3___
+Estimate of time needed to complete: __2___
 
 Start time: _____
 
 Finish time: _____
 
-Actual time needed to complete: _____
+Actual time needed to complete: __.5___
 
 
 # city-explorer-api
